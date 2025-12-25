@@ -1,0 +1,5 @@
+{
+  "name": "CLI-Verse: The Agent Registry",
+  "description": "A futuristic, layered registry of CLI coding agents and AI terminal tools. Features deep analysis powered by Gemini 2.5 Flash, comparison tools, and a command-line aesthetic interface.",
+  "requestFramePermissions": []
+}
