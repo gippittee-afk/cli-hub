@@ -1,6 +1,7 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
 import { Agent } from '../types';
+import { AgentSeed, enrichAgent } from './agentEnrichment';
 
 // Use process.env.API_KEY directly as per guidelines
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
@@ -207,21 +208,8 @@ export const fetchTrendingAgents = async (existingNames: string[]): Promise<Agen
     const text = response.text;
     if (!text) return [];
     
-    const agents = JSON.parse(text) as Agent[];
-    
-    // Enrich with mock reviews to match the app structure as 'reviews' are required in Agent type
-    return agents.map(a => ({
-        ...a,
-        reviews: [
-            {
-                id: `r-new-${Math.random().toString(36).substr(2, 9)}`,
-                user: 'Early_Adopter',
-                rating: 5,
-                comment: 'Just discovered this on the live feed. Incredible potential.',
-                date: new Date().toISOString().split('T')[0]
-            }
-        ]
-    }));
+    const agents = JSON.parse(text) as AgentSeed[];
+    return agents.map(agent => enrichAgent(agent));
   } catch (error: any) {
     console.error("Auto-update failed:", error);
     return [];

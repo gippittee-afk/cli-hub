@@ -1,5 +1,6 @@
 
-import { Agent, AgentCategory } from './types';
+import { AgentCategory } from './types';
+import { AgentSeed } from './services/agentEnrichment';
 
 // Exporting TAG_DESCRIPTIONS to provide tooltips for agent tags
 export const TAG_DESCRIPTIONS: Record<string, string> = {
@@ -45,10 +46,14 @@ export const TAG_DESCRIPTIONS: Record<string, string> = {
   'logging': 'Detailed tracking of model interactions.',
   'experimentation': 'Ideal for testing different models or prompts.',
   'iac': 'Infrastructure as Code automation.',
-  'tui': 'Terminal User Interface with visual elements.'
+  'tui': 'Terminal User Interface with visual elements.',
+  'local': 'Runs entirely on local hardware or filesystem resources.',
+  'shell': 'Deep integration with shell environments and prompt tooling.',
+  'search': 'Optimized for fast search and discovery workflows.',
+  'navigation': 'Specialized in rapid navigation between directories.'
 };
 
-export const AGENTS: Agent[] = [
+export const AGENT_SEEDS: AgentSeed[] = [
   // --- 2.0 AI-ENHANCED TERMINAL EMULATORS ---
   {
     id: 'wave-terminal',
@@ -63,7 +68,6 @@ export const AGENTS: Agent[] = [
     features: ['Integrated AI Chat', 'Built-in Editor', 'Command Blocks', 'Inline Multimedia'],
     tags: ['terminal', 'open-source', 'productivity'],
     useCases: ['Monitoring agent execution plans.', 'Editing remote files.', 'In-terminal documentation browsing.'],
-    reviews: [],
     version: 'v0.7.2'
   },
   {
@@ -79,7 +83,6 @@ export const AGENTS: Agent[] = [
     features: ['Agentic Workflow Integration', 'Warp Drive Collaboration', 'Block-based outputs'],
     tags: ['terminal', 'rust', 'proprietary'],
     useCases: ['Translating intent to bash.', 'Collaborative debugging.', 'Team-shared terminal blocks.'],
-    reviews: [],
     version: '2025.01.12'
   },
   // --- 3.0 AGENTIC CODING ASSISTANTS ---
@@ -96,7 +99,6 @@ export const AGENTS: Agent[] = [
     features: ['Context Building', 'BashTool execution', 'Tiered Permissions'],
     tags: ['coding', 'autonomous', 'sota'],
     useCases: ['Complex refactoring.', 'Autonomous bug detection.', 'CI/CD pipeline automation.'],
-    reviews: [],
     version: 'v1.0.4'
   },
   {
@@ -112,7 +114,6 @@ export const AGENTS: Agent[] = [
     features: ['Memory Bank', 'Plan & Act workflow', 'Checkpoint snapshots'],
     tags: ['open-source', 'coding', 'git'],
     useCases: ['Safe experimentation with snapshots.', 'Local-first private coding.', 'Methodical feature planning.'],
-    reviews: [],
     version: 'v2.1.0'
   },
   {
@@ -128,7 +129,6 @@ export const AGENTS: Agent[] = [
     features: ['Repository Mapping', 'Deep Git Integration', 'Multi-LLM Support'],
     tags: ['python', 'git', 'coding'],
     useCases: ['Large module refactoring.', 'Managing project-wide code changes.', 'Git conflict resolution.'],
-    reviews: [],
     version: 'v0.68.0'
   },
   {
@@ -144,7 +144,6 @@ export const AGENTS: Agent[] = [
     features: ['2M Context window', 'Automated Debugging', 'Tree-sitter indexing'],
     tags: ['go', 'complex-tasks', 'planning'],
     useCases: ['Enterprise-scale codebase navigation.', 'Long-running multi-file implementation.', 'Automated test suite debugging.'],
-    reviews: [],
     version: 'v0.12.0'
   },
   {
@@ -160,7 +159,6 @@ export const AGENTS: Agent[] = [
     features: ['Native Sandboxing', 'Model-Agnostic', 'Secure Isolation'],
     tags: ['python', 'security', 'sandbox'],
     useCases: ['Safe execution of untrusted scripts.', 'Sandboxed feature building.', 'Security analysis of code.'],
-    reviews: [],
     version: 'v0.15.2'
   },
   {
@@ -176,7 +174,6 @@ export const AGENTS: Agent[] = [
     features: ['Agent Mode Activation', 'Official Workspace Indexing', 'Multi-file Edits'],
     tags: ['github', 'official', 'productivity'],
     useCases: ['Automating PR reviews.', 'Complex workspace navigation.', 'Iterative feature development.'],
-    reviews: [],
     version: 'v1.2.0'
   },
   {
@@ -192,7 +189,6 @@ export const AGENTS: Agent[] = [
     features: ['Ghost Text Suggestions', 'Intelligent completions', 'AWS native optimization'],
     tags: ['aws', 'cloud', 'productivity'],
     useCases: ['Accelerating AWS deployments.', 'Learning complex CLI flags.', 'Faster terminal navigation.'],
-    reviews: [],
     version: '2025.1'
   },
   {
@@ -208,7 +204,6 @@ export const AGENTS: Agent[] = [
     features: ['1M Context support', 'Native Tool Integration', 'Google Cloud backend'],
     tags: ['google', 'sota', 'utility'],
     useCases: ['Analyzing massive documentation.', 'Fast coding queries.', 'Large-scale repo summarization.'],
-    reviews: [],
     version: 'v1.4.0'
   },
   // --- 4.0 LOCAL FRAMEWORKS ---
@@ -225,7 +220,6 @@ export const AGENTS: Agent[] = [
     features: ['Hardware acceleration', 'Stable tool calling', 'REST API'],
     tags: ['local-llm', 'open-source', 'inference'],
     useCases: ['Private AI serving.', 'Local agent hosting.', 'Offline development.'],
-    reviews: [],
     version: 'v0.5.7'
   },
   {
@@ -241,7 +235,6 @@ export const AGENTS: Agent[] = [
     features: ['Hugging Face integration', 'Visual parameter tuning', 'Local server'],
     tags: ['local-llm', 'gui', 'inference'],
     useCases: ['Visual model benchmarking.', 'Prototyping local agent flows.', 'Low-barrier entry to local AI.'],
-    reviews: [],
     version: 'v0.3.5'
   },
   {
@@ -257,7 +250,6 @@ export const AGENTS: Agent[] = [
     features: ['P2P Inference', 'Function calling', 'Multi-modal'],
     tags: ['local-llm', 'api', 'distributed'],
     useCases: ['Enterprise self-hosting.', 'Building tool-using agents locally.', 'Secure on-prem AI stacks.'],
-    reviews: [],
     version: 'v2.24.0'
   },
   {
@@ -273,7 +265,6 @@ export const AGENTS: Agent[] = [
     features: ['Cortex Engine', '100% Offline', 'Extensions'],
     tags: ['privacy', 'offline', 'desktop'],
     useCases: ['Air-gapped AI chat.', 'Private document analysis.', 'Personal knowledge management.'],
-    reviews: [],
     version: 'v0.5.8'
   },
   {
@@ -289,7 +280,6 @@ export const AGENTS: Agent[] = [
     features: ['Zero installation', 'Single-executable', 'Multi-platform'],
     tags: ['mozilla', 'foundational', 'portable'],
     useCases: ['Portable AI on thumb drives.', 'Simple model distribution.', 'Zero-dependency deployments.'],
-    reviews: [],
     version: 'v0.8.1'
   },
   // --- 5.0 SPECIALIZED AUTOMATION ---
@@ -306,7 +296,6 @@ export const AGENTS: Agent[] = [
     features: ['OS Control', 'Local Execution', 'Vision support'],
     tags: ['automation', 'interpreter', 'local'],
     useCases: ['Complex desktop automation.', 'Programmatic file analysis.', 'Autonomous research.'],
-    reviews: [],
     version: 'v0.2.0'
   },
   {
@@ -322,7 +311,6 @@ export const AGENTS: Agent[] = [
     features: ['REPL mode', 'Shell snippets', 'Custom functions'],
     tags: ['bash', 'productivity', 'snippets'],
     useCases: ['Translating intent to regex/ffmpeg.', 'Quick terminal lookup.', 'Interactive terminal chat.'],
-    reviews: [],
     version: 'v0.9.1'
   },
   {
@@ -338,24 +326,22 @@ export const AGENTS: Agent[] = [
     features: ['Pattern Library', 'Consistent outputs', 'Summarization'],
     tags: ['prompts', 'productivity', 'framework'],
     useCases: ['Technical transcription extraction.', 'Structured article summaries.', 'Pattern-based automation.'],
-    reviews: [],
     version: 'v2.1'
   },
   {
-    id: 'ask-sh',
-    name: 'ask.sh',
-    description: 'Terminal assistant that reads/writes directly to the shell session.',
-    longDescription: 'Eliminates copy-pasting by reading the terminal buffer to understand error context and injecting fixes directly.',
+    id: 'atuin',
+    name: 'Atuin',
+    description: 'Encrypted, syncable shell history with powerful query and analytics.',
+    longDescription: 'Atuin replaces shell history with a searchable, server-backed timeline. It supports encryption, multi-device sync, and fuzzy querying for repeatable workflows.',
     category: AgentCategory.TERMINAL_UTILITY,
-    stars: 3500,
+    stars: 17000,
     language: 'Rust',
-    installCommand: 'brew install ask-sh',
-    repoUrl: 'https://github.com/todo/ask-sh',
-    features: ['Buffer reading', 'Direct injection', 'Context awareness'],
-    tags: ['rust', 'debugging', 'productivity'],
-    useCases: ['Instant debugging of terminal errors.', 'Command auto-correction.', 'Fast tool navigation.'],
-    reviews: [],
-    version: 'v0.4.0'
+    installCommand: 'brew install atuin',
+    repoUrl: 'https://github.com/atuinsh/atuin',
+    features: ['Encrypted sync', 'Fuzzy history search', 'Shell analytics'],
+    tags: ['rust', 'productivity', 'shell'],
+    useCases: ['Recovering complex command sequences.', 'Auditing shell usage patterns.', 'Cross-machine history sync.'],
+    version: 'v18.1.0'
   },
   {
     id: 'llm-cli',
@@ -370,7 +356,6 @@ export const AGENTS: Agent[] = [
     features: ['Plugin system', 'SQLite logging', 'Multi-model support'],
     tags: ['python', 'logging', 'experimentation'],
     useCases: ['Benchmarking different prompts.', 'Scripting AI interactions.', 'Preserving conversation history.'],
-    reviews: [],
     version: 'v0.18'
   },
   // --- 6.0 FOUNDATIONAL TOOLS ---
@@ -387,24 +372,22 @@ export const AGENTS: Agent[] = [
     features: ['Comprehensive coverage', 'Automation ready', 'Consistent syntax'],
     tags: ['aws', 'cloud', 'foundational'],
     useCases: ['Infrastructure automation.', 'Managing S3/EC2 via scripts.', 'CI/CD pipeline integration.'],
-    reviews: [],
     version: 'v2.17'
   },
   {
     id: 'pulstack',
-    name: 'Pulstack',
-    description: 'Deploys static websites to AWS/GitHub with zero manual work.',
-    longDescription: 'Uses Pulumi to provision secure-by-default infrastructure for static sites automatically.',
+    name: 'Pulumi',
+    description: 'Infrastructure as Code CLI for provisioning cloud resources in real languages.',
+    longDescription: 'Pulumi offers a production-grade CLI for managing cloud infrastructure with TypeScript, Go, Python, and more, enabling previews, policy enforcement, and multi-cloud deployments.',
     category: AgentCategory.INFRASTRUCTURE,
-    stars: 2500,
+    stars: 21000,
     language: 'Go',
-    installCommand: 'npm install -g pulstack',
-    repoUrl: 'https://github.com/todo/pulstack',
-    features: ['Secure by default', 'Zero manual work', 'IaC native'],
-    tags: ['iac', 'aws', 'automation'],
-    useCases: ['Rapid static site hosting.', 'Secure cloud provisioning.', 'Automatic site teardown.'],
-    reviews: [],
-    version: 'v1.0.2'
+    installCommand: 'brew install pulumi',
+    repoUrl: 'https://github.com/pulumi/pulumi',
+    features: ['Policy as code', 'Multi-cloud support', 'Preview diffs'],
+    tags: ['iac', 'cloud', 'automation'],
+    useCases: ['Infrastructure previews before apply.', 'Multi-cloud deployments.', 'Compliance enforcement with policy packs.'],
+    version: 'v3.132.0'
   },
   {
     id: 'lazygit',
@@ -419,14 +402,141 @@ export const AGENTS: Agent[] = [
     features: ['Interactive staging', 'Commit squashing', 'Visual diffs'],
     tags: ['git', 'tui', 'go'],
     useCases: ['Speeding up Git workflows.', 'Complex conflict resolution.', 'Visual Git navigation.'],
-    reviews: [],
     version: 'v0.40'
+  },
+  {
+    id: 'ripgrep',
+    name: 'ripgrep',
+    description: 'Ultra-fast recursive search for source trees.',
+    longDescription: 'ripgrep blends Rust performance with smart defaults like .gitignore awareness, multi-line search, and regex optimizations for large codebases.',
+    category: AgentCategory.TERMINAL_UTILITY,
+    stars: 45000,
+    language: 'Rust',
+    installCommand: 'brew install ripgrep',
+    repoUrl: 'https://github.com/BurntSushi/ripgrep',
+    features: ['Regex engine', 'Smart ignore', 'Multiline search'],
+    tags: ['rust', 'search', 'productivity'],
+    useCases: ['Scanning monorepos.', 'Regex-powered refactors.', 'Audit log inspections.'],
+    version: '14.1.0'
+  },
+  {
+    id: 'fd',
+    name: 'fd',
+    description: 'Fast, user-friendly alternative to find.',
+    longDescription: 'fd provides a simple, intuitive syntax with colored output, smart defaults, and parallel directory traversal for lightning-fast searches.',
+    category: AgentCategory.TERMINAL_UTILITY,
+    stars: 36000,
+    language: 'Rust',
+    installCommand: 'brew install fd',
+    repoUrl: 'https://github.com/sharkdp/fd',
+    features: ['Smart defaults', 'Parallel traversal', 'Regex support'],
+    tags: ['rust', 'search', 'productivity'],
+    useCases: ['File discovery.', 'Quick project scans.', 'Bulk operations in pipelines.'],
+    version: '10.1.0'
+  },
+  {
+    id: 'bat',
+    name: 'bat',
+    description: 'cat clone with syntax highlighting and Git integration.',
+    longDescription: 'bat brings syntax-aware file viewing, themes, and Git diff markers to the terminal for improved readability.',
+    category: AgentCategory.TERMINAL_UTILITY,
+    stars: 49000,
+    language: 'Rust',
+    installCommand: 'brew install bat',
+    repoUrl: 'https://github.com/sharkdp/bat',
+    features: ['Syntax highlighting', 'Git diff markers', 'Themes'],
+    tags: ['rust', 'productivity', 'utility'],
+    useCases: ['Inspecting config files.', 'Reviewing diffs inline.', 'Readable logs.'],
+    version: '0.24.0'
+  },
+  {
+    id: 'fzf',
+    name: 'fzf',
+    description: 'General-purpose command-line fuzzy finder.',
+    longDescription: 'fzf enables interactive filtering for files, history, and process lists with key bindings and advanced previews.',
+    category: AgentCategory.TERMINAL_UTILITY,
+    stars: 66000,
+    language: 'Go',
+    installCommand: 'brew install fzf',
+    repoUrl: 'https://github.com/junegunn/fzf',
+    features: ['Fuzzy matching', 'Preview pane', 'Key bindings'],
+    tags: ['go', 'productivity', 'navigation'],
+    useCases: ['Fast file navigation.', 'Searchable command history.', 'Interactive workflow scripts.'],
+    version: '0.53.0'
+  },
+  {
+    id: 'zoxide',
+    name: 'zoxide',
+    description: 'Smarter cd command that learns your habits.',
+    longDescription: 'zoxide is a blazing-fast directory jumper that learns from your navigation patterns to shortcut repetitive movement.',
+    category: AgentCategory.TERMINAL_UTILITY,
+    stars: 25000,
+    language: 'Rust',
+    installCommand: 'brew install zoxide',
+    repoUrl: 'https://github.com/ajeetdsouza/zoxide',
+    features: ['Adaptive ranking', 'Shell integrations', 'Fast matching'],
+    tags: ['rust', 'navigation', 'productivity'],
+    useCases: ['Jumping to deep folders.', 'Reducing command friction.', 'Context switching between projects.'],
+    version: '0.9.4'
+  },
+  {
+    id: 'starship',
+    name: 'Starship',
+    description: 'Cross-shell prompt with fast, informative segments.',
+    longDescription: 'Starship delivers a sleek, highly configurable prompt with git status, runtime metadata, and instant startup across shells.',
+    category: AgentCategory.TERMINAL_UTILITY,
+    stars: 41000,
+    language: 'Rust',
+    installCommand: 'brew install starship',
+    repoUrl: 'https://github.com/starship/starship',
+    features: ['Cross-shell', 'Instant prompt', 'Runtime metadata'],
+    tags: ['rust', 'shell', 'productivity'],
+    useCases: ['Unified prompts across machines.', 'Instant context on repos.', 'Custom status indicators.'],
+    version: '1.20.1'
+  },
+  {
+    id: 'direnv',
+    name: 'direnv',
+    description: 'Per-directory environment variables for project isolation.',
+    longDescription: 'direnv automatically loads and unloads environment variables per directory, ensuring reproducible local configuration across teams.',
+    category: AgentCategory.TERMINAL_UTILITY,
+    stars: 12000,
+    language: 'Go',
+    installCommand: 'brew install direnv',
+    repoUrl: 'https://github.com/direnv/direnv',
+    features: ['Directory hooks', 'Shell integration', 'Security audit'],
+    tags: ['go', 'automation', 'shell'],
+    useCases: ['Automatic .env loading.', 'Consistent project configs.', 'Reduced onboarding time.'],
+    version: '2.34.0'
+  },
+  {
+    id: 'gh-cli',
+    name: 'GitHub CLI',
+    description: 'Command-line interface for GitHub workflows.',
+    longDescription: 'GitHub CLI brings issues, PRs, and workflows into the terminal with OAuth authentication, templates, and API-friendly automation.',
+    category: AgentCategory.TERMINAL_UTILITY,
+    stars: 41000,
+    language: 'Go',
+    installCommand: 'brew install gh',
+    repoUrl: 'https://github.com/cli/cli',
+    features: ['PR management', 'Workflow runs', 'API integration'],
+    tags: ['git', 'github', 'productivity'],
+    useCases: ['Reviewing PRs from terminal.', 'Triggering CI runs.', 'Automating GitHub tasks.'],
+    version: '2.54.0'
+  },
+  {
+    id: 'just',
+    name: 'just',
+    description: 'Command runner for reproducible project tasks.',
+    longDescription: 'just offers a modern take on makefiles with simple syntax, command discovery, and cross-platform execution.',
+    category: AgentCategory.TERMINAL_UTILITY,
+    stars: 21000,
+    language: 'Rust',
+    installCommand: 'brew install just',
+    repoUrl: 'https://github.com/casey/just',
+    features: ['Task discovery', 'Cross-platform', 'Dotenv support'],
+    tags: ['automation', 'rust', 'productivity'],
+    useCases: ['Standardizing project commands.', 'Reducing script sprawl.', 'Onboarding automation.'],
+    version: '1.35.0'
   }
-];
-
-export const MOCK_HISTORY = [
-  { year: 2005, event: 'Git Created', detail: 'Foundational version control system.' },
-  { year: 2022, event: 'AI Explosion', detail: 'LLMs begin redefining terminal interaction.' },
-  { year: 2024, event: 'Autonomous Agents', detail: 'Tools like Aider and Claude Code take center stage.' },
-  { year: 2025, event: 'Agentic CLI Era', detail: 'Terminal evolves into an autonomous dev environment.' },
 ];
