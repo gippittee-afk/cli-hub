@@ -1,28 +1,28 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { AGENTS, MOCK_HISTORY } from './constants';
-import { Agent, AgentCategory, Review, ChatMessage, AgentStatus } from './types';
+import { AGENT_SEEDS } from './constants';
+import { Agent, AgentCategory, ChatMessage } from './types';
 import TerminalHero from './components/TerminalHero';
 import AgentCard from './components/AgentCard';
 import AgentDetailLayer from './components/AgentDetailLayer';
 import ComparisonLayer from './components/ComparisonLayer';
-import CommandGenerator from './components/CommandGenerator';
-import CollaborationLayer from './components/CollaborationLayer';
 import { 
-  Search, Filter, MessageSquare, History, ChevronDown, 
-  ArrowUpDown, Terminal, Users, X, Tag, ArrowRightLeft, 
+  Search, MessageSquare, ArrowUpDown, X,
   Wifi, ChevronLeft, ChevronRight, RefreshCw, Activity 
 } from 'lucide-react';
 import { askExpert } from './services/geminiService';
 import { RegistrySyncService } from './services/syncService';
+import { buildCategoryStats, buildRegistryHealth, buildRegistryTimeline, enrichAgents } from './services/agentEnrichment';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 const App: React.FC = () => {
-  const [agents, setAgents] = useState<Agent[]>(AGENTS.map(a => ({
-    ...a,
-    status: 'LIVE',
-    lastSynced: new Date().toISOString()
-  })));
+  const [agents, setAgents] = useState<Agent[]>(() => (
+    enrichAgents(AGENT_SEEDS).map(agent => ({
+      ...agent,
+      status: 'LIVE',
+      lastSynced: new Date().toISOString()
+    }))
+  ));
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
   const [compareAgentA, setCompareAgentA] = useState<Agent | null>(null);
   const [compareAgentB, setCompareAgentB] = useState<Agent | null>(null);
@@ -52,6 +52,11 @@ const App: React.FC = () => {
       {role: 'model', text: 'CLI-Verse Node initialized. Direct metadata pulling active. How can I assist?'}
   ]);
   const [chatLoading, setChatLoading] = useState(false);
+  const categoryStats = useMemo(() => buildCategoryStats(agents), [agents]);
+  const registryTimeline = useMemo(() => buildRegistryTimeline(agents), [agents]);
+  const registryHealth = useMemo(() => buildRegistryHealth(agents), [agents]);
+  const totalStars = useMemo(() => agents.reduce((sum, agent) => sum + agent.stars, 0), [agents]);
+  const averageStars = useMemo(() => Math.round(totalStars / Math.max(1, agents.length)), [totalStars, agents.length]);
 
   // Filter & Sort Logic (Memoized for performance)
   const sortedFilteredAgents = useMemo(() => {
@@ -228,6 +233,73 @@ const App: React.FC = () => {
             </div>
         </div>
 
+        {/* Registry Intelligence */}
+        <section className="mb-12 bg-black/40 border border-white/10 rounded-2xl p-6 shadow-xl">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                <div>
+                    <div className="text-[10px] font-mono text-gray-500 uppercase tracking-[0.25em]">Registry Intelligence</div>
+                    <h2 className="text-xl font-semibold text-white">Operational Telemetry</h2>
+                </div>
+                <div className="text-[10px] font-mono text-gray-600 uppercase">
+                    Signal derived from {agents.length} live nodes
+                </div>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_2fr] gap-6">
+                <div className="space-y-4">
+                    <div className="rounded-xl border border-white/10 bg-black/60 p-4">
+                        <div className="text-xs font-mono text-gray-500 uppercase">Signal Integrity</div>
+                        <div className="text-2xl font-bold text-cyan-400">{registryHealth.signalIntegrity}%</div>
+                        <p className="text-xs text-gray-500 mt-2">
+                            Composite score balancing catalog breadth and stability variance.
+                        </p>
+                    </div>
+                    <div className="rounded-xl border border-white/10 bg-black/60 p-4">
+                        <div className="text-xs font-mono text-gray-500 uppercase">Coverage Index</div>
+                        <div className="text-2xl font-bold text-cyan-400">{registryHealth.coverageIndex}%</div>
+                        <p className="text-xs text-gray-500 mt-2">
+                            Weighted spread of adoption across the registry surface.
+                        </p>
+                    </div>
+                    <div className="rounded-xl border border-white/10 bg-black/60 p-4">
+                        <div className="text-xs font-mono text-gray-500 uppercase">Stars / Node</div>
+                        <div className="text-2xl font-bold text-cyan-400">{averageStars.toLocaleString()}</div>
+                        <p className="text-xs text-gray-500 mt-2">
+                            Averaged from {totalStars.toLocaleString()} total stars across all entries.
+                        </p>
+                    </div>
+                </div>
+                <div className="space-y-6">
+                    <div className="rounded-xl border border-white/10 bg-black/60 p-4">
+                        <div className="text-xs font-mono text-gray-500 uppercase mb-3">Registry Growth Curve</div>
+                        <div className="h-56">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <BarChart data={registryTimeline} margin={{ left: -12, right: 8 }}>
+                                    <XAxis dataKey="year" tick={{ fill: '#6b7280', fontSize: 10 }} />
+                                    <YAxis tick={{ fill: '#6b7280', fontSize: 10 }} />
+                                    <Tooltip contentStyle={{ background: '#0b0b0b', border: '1px solid #1f2937', fontSize: '10px' }} />
+                                    <Bar dataKey="adoptionIndex" fill="#22d3ee" radius={[4, 4, 0, 0]} />
+                                    <Bar dataKey="reliabilityIndex" fill="#10b981" radius={[4, 4, 0, 0]} />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
+                    </div>
+                    <div className="rounded-xl border border-white/10 bg-black/60 p-4">
+                        <div className="text-xs font-mono text-gray-500 uppercase mb-3">Category Maturity</div>
+                        <div className="h-56">
+                            <ResponsiveContainer width="100%" height="100%">
+                                <BarChart data={categoryStats} layout="vertical" margin={{ left: 30 }}>
+                                    <XAxis type="number" tick={{ fill: '#6b7280', fontSize: 10 }} />
+                                    <YAxis type="category" dataKey="category" width={110} tick={{ fill: '#6b7280', fontSize: 10 }} />
+                                    <Tooltip contentStyle={{ background: '#0b0b0b', border: '1px solid #1f2937', fontSize: '10px' }} />
+                                    <Bar dataKey="maturityScore" fill="#38bdf8" radius={[0, 4, 4, 0]} />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         {/* Dynamic Agent Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             {paginatedAgents.map(agent => (
@@ -339,7 +411,7 @@ const App: React.FC = () => {
                           </div>
                       </div>
                   ))}
-                  {chatLoading && <div className="text-cyan-600 animate-pulse">> ANALYZING DATA STREAM...</div>}
+                  {chatLoading && <div className="text-cyan-600 animate-pulse">{'>'} ANALYZING DATA STREAM...</div>}
               </div>
               <form onSubmit={handleChatSubmit} className="p-3 border-t border-white/10 bg-black">
                   <input 

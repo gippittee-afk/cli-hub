@@ -75,7 +75,7 @@ const TerminalHero: React.FC<TerminalHeroProps> = ({ isScanning = false }) => {
                 </div>
                 <div className="p-4 h-64 text-green-500/90 whitespace-pre-wrap leading-relaxed">
                     {text}
-                    {isScanning && <span className="block mt-2 text-cyan-400">> DETECTING NEW PROTOCOLS...</span>}
+                    {isScanning && <span className="block mt-2 text-cyan-400">{'>'} DETECTING NEW PROTOCOLS...</span>}
                     <span className="animate-pulse">_</span>
                 </div>
                 {/* Scanline overlay */}
