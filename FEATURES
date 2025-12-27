@@ -1,0 +1,12 @@
+# FEATURES
+
+## Proposed industry-standard improvements
+1. **Authentication & RBAC (most important now)**
+   - Add secure authentication flows (OIDC/OAuth2) with role-based access control to protect user actions and system-level commands.
+   - Rationale: establishes baseline security posture before expanding functionality or integrations.
+
+2. **Observability & Audit Logging**
+   - Structured logs, metrics, tracing, and immutable audit trails for CLI operations to support debugging, compliance, and incident response.
+
+3. **Update & Release Management**
+   - Signed releases, auto-update checks, and versioned migrations to ensure consistent upgrades and rollback safety.
