@@ -35,6 +35,10 @@ export interface Agent {
   isNew?: boolean;
   status?: AgentStatus;
   lastSynced?: string;
+  repoLastPushed?: string;
+  repoLastUpdated?: string;
+  lastSyncError?: string;
+  lastSyncErrorAt?: string;
   version?: string;
 }
 

@@ -2,17 +2,14 @@
 
 ## Conceptual test coverage plan (no mocks)
 
-### Authentication & RBAC
-- **Token validation edge cases:** expired, not-yet-valid, invalid signature, missing audience, wrong issuer.
-- **Role enforcement:** verify allow/deny across roles with boundary conditions.
-- **Command matrix:** for each CLI command, test with roles {-1,0,1,2,3,4,5,6,7,8,9,10,11,12} mapped to permission tiers to confirm explicit allow/deny results.
+### Live registry sync & status evaluation
+- **GitHub metadata ingestion:** validate `stargazers_count`, `updated_at`, `pushed_at` mapping for a known repo.
+- **Non-GitHub metadata ingestion:** HEAD request returns `Last-Modified` or `Date` headers and updates `repoLastUpdated`.
+- **Status matrix:** for each status outcome (LIVE, UPDATE_AVAILABLE, OFFLINE, SYNCING), test time deltas at {-1,0,1,2,3,4,5,6,7,8,9,10,11,12} minutes around thresholds to confirm deterministic boundaries.
+- **Error handling:** simulate fetch timeout, 404, and CORS error to confirm OFFLINE with `lastSyncErrorAt` set.
+- **Idempotence:** run `syncAgent` twice with identical metadata and assert identical agent state.
 
-### Observability & Audit Logging
-- **Structured log schema:** validate presence of correlation IDs, user IDs, command name, latency, and outcome codes.
-- **Trace propagation:** ensure context flows through nested commands and sub-processes.
-- **Audit immutability:** verify append-only behavior under concurrent writes and failure scenarios.
-
-### Update & Release Management
-- **Signature verification:** verify acceptance of valid signatures and rejection of tampered artifacts.
-- **Versioned migrations:** ensure backward-compatible upgrade paths and rollback integrity.
-- **Failure injection:** simulate partial download, network loss, and corrupt cache to confirm safe aborts.
+### Release readiness verification
+- **Environment key injection:** confirm builds succeed with `GEMINI_API_KEY` present and fail loudly without it.
+- **Outbound dependency check:** verify the deployed environment can reach `https://api.github.com` and that rate limiting is logged/handled.
+- **Post-deploy smoke:** use the UI to trigger FORCE_SYNC and verify stars/timestamps update without console errors.

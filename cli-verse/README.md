@@ -18,3 +18,11 @@ View your app in AI Studio: https://ai.studio/apps/drive/1Wajx_s8z-sDbh1_urv2Hix
 2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
 3. Run the app:
    `npm run dev`
+
+## Release checklist
+
+1. Ensure `GEMINI_API_KEY` is set in the deployment environment used for the build.
+2. Verify outbound HTTPS access to `api.github.com` for live metadata sync.
+3. Build the production bundle: `npm run build`
+4. Serve the `dist/` output with a static host or CDN.
+5. After deploy, trigger a "FORCE_SYNC" to validate metadata ingestion.
