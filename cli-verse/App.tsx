@@ -92,33 +92,53 @@ const App: React.FC = () => {
   // Deterministic Status Checker (Background Loop)
   useEffect(() => {
     const interval = setInterval(() => {
-      setAgents(prev => prev.map(a => ({
-        ...a,
-        status: RegistrySyncService.checkStatus(a)
-      })));
+      setAgents(prev => prev.map(agent => {
+        if (agent.status === 'SYNCING') return agent;
+        return {
+          ...agent,
+          status: RegistrySyncService.checkStatus(agent)
+        };
+      }));
     }, 30000); // Check status every 30s
     return () => clearInterval(interval);
   }, []);
 
   const handleGlobalSync = async () => {
     setIsGlobalSyncing(true);
-    setChatHistory(prev => [...prev, { role: 'model', text: '> PULLING LATEST METADATA FROM REGISTRY NODES...' }]);
+    setChatHistory(prev => [...prev, { role: 'model', text: '> REQUESTING LIVE REPOSITORY METADATA...' }]);
     
-    // Logic: Force all visible agents into SYNCING state
-    setAgents(prev => prev.map(a => ({ ...a, status: 'SYNCING' })));
-    
-    // Simulate high-bandwidth active pulling
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    
-    setAgents(prev => prev.map(a => ({ 
-      ...a, 
-      status: 'LIVE', 
-      lastSynced: new Date().toISOString() 
-    })));
+    const snapshot = agents;
+    setAgents(prev => prev.map(agent => ({ ...agent, status: 'SYNCING' })));
+
+    const results = await Promise.all(snapshot.map(agent => RegistrySyncService.syncAgent(agent)));
+    const resultMap = new Map(results.map(result => [result.id, result]));
+
+    setAgents(prev => prev.map(agent => {
+      const result = resultMap.get(agent.id);
+      if (!result) return agent;
+      return {
+        ...agent,
+        status: result.status,
+        lastSynced: result.timestamp,
+        stars: result.stars ?? agent.stars,
+        repoLastUpdated: result.repoLastUpdated ?? agent.repoLastUpdated,
+        repoLastPushed: result.repoLastPushed ?? agent.repoLastPushed,
+        lastSyncError: result.lastSyncError,
+        lastSyncErrorAt: result.lastSyncErrorAt
+      };
+    }));
     
     setLastGlobalSync(new Date().toLocaleTimeString());
     setIsGlobalSyncing(false);
-    setChatHistory(prev => [...prev, { role: 'model', text: '> REGISTRY SYNCHRONIZED. INTEGRITY 100%.' }]);
+    const offlineCount = results.filter(result => result.status === 'OFFLINE').length;
+    const updateCount = results.filter(result => result.status === 'UPDATE_AVAILABLE').length;
+    setChatHistory(prev => [
+      ...prev,
+      {
+        role: 'model',
+        text: `> REGISTRY SYNC COMPLETE. ${updateCount} UPDATE SIGNALS. ${offlineCount} OFFLINE NODES.`
+      }
+    ]);
   };
 
   const handleChatSubmit = async (e: React.FormEvent) => {

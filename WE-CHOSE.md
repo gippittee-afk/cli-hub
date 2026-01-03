@@ -3,17 +3,17 @@
 ## Three-perspective evaluation
 
 ### Perspective: CEO
-- **Goal:** Reduce enterprise risk, increase adoption velocity.
-- **Decision logic:** Security gates adoption. Without authentication & RBAC, procurement and compliance will stall. Observability and release hygiene follow as next-tier enablers.
+- **Goal:** Ship a registry that users can trust during launch and demos.
+- **Decision logic:** Replace simulated syncing with real metadata pulls so the experience matches observable reality. This reduces reputational risk during release.
 
 ### Perspective: Junior Developer
-- **Goal:** Clear implementation path, minimal ambiguity.
-- **Decision logic:** Auth & RBAC define boundaries for all other features. Once roles and permissions exist, logging can be standardized and releases can enforce signed artifacts.
+- **Goal:** Build a maintainable sync pipeline without rewriting the UI.
+- **Decision logic:** Keep the sync API surface (`checkStatus`, `syncAgent`) but make the internals deterministic and data-driven. This minimizes churn while eliminating fake behavior.
 
 ### Perspective: End Customer
-- **Goal:** Trust and reliability.
-- **Decision logic:** Users want to know the CLI won’t leak data or execute unintended actions. Authentication & RBAC provides confidence, then observability helps resolve issues, and update management prevents disruption.
+- **Goal:** See accurate status and updates, not “game-like” placeholders.
+- **Decision logic:** Provide real repo metadata with clear offline detection and update signals. This makes the registry feel reliable and current.
 
 ## Final choice mapping
-- **Selected most important:** Authentication & RBAC
-- **Mapped to logic chain:** Security is a gating factor for production readiness; other improvements are lower-risk once identity and authorization are guaranteed.
+- **Selected implementation:** Live metadata sync with deterministic status evaluation.
+- **Mapped to logic chain:** Real data → stored timestamps → deterministic status rules → trustworthy UI state.
